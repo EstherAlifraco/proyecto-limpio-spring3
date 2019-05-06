@@ -52,5 +52,31 @@ public class ContinenteTest extends SpringTest{
 		
 //2)Buscar todos los paises de habla inglesa
 		
+	@Test
+	@Transactional
+	@Rollback(true)
+	@SuppressWarnings("unchecked")
+	public void buscarPaisesDeHablaInglesa(){
 		
+		Pais estadosUnidos=new Pais();
+		estadosUnidos.setIdioma("ingles");
+		getSession().save(estadosUnidos);
+		
+		Pais inglaterra=new Pais();
+		inglaterra.setIdioma("ingles");
+		getSession().save(inglaterra);
+		
+		Pais argentina=new Pais();
+		argentina.setIdioma("castellano");
+		getSession().save(argentina);
+		
+		List<Pais> listaPaises= getSession().createCriteria(Pais.class)
+				                  .add(Restrictions.eq("idioma","ingles"))
+								  .list();
+		
+		assertThat(listaPaises).hasSize(2);
+	}
+	
+//3) Hacer con junit un test que busque todos los países del continente europeo. 
+    	
 }

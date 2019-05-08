@@ -134,6 +134,81 @@ public class ContinenteTest extends SpringTest{
     }
     
     
-//4- Hacer con junit un test que busque todos los países cuya capital están al norte del trópico de cáncer. 
+//4) Hacer con junit un test que busque todos los países cuya capital están al norte del trópico de cáncer. 
     	
+    @Test
+    @Transactional
+    @Rollback(true)
+    @SuppressWarnings("unchecked")
+    public void buscarPaisesCapitalSuTropicoDeCancer() {
+    
+    	pais.setNombre("Inglaterra");
+    	pais.setIdioma("Ingles");
+    	
+		pais1.setNombre("Irlanda");
+		pais1.setIdioma("ingles");
+		
+		pais2.setNombre("Argentina");
+		pais2.setIdioma("español");
+    	
+    	pais3.setNombre("Francia");
+		pais3.setIdioma("frances");
+    	
+    	
+        ciudad.setNombre("Londres");
+        
+    	ciudad1.setNombre("Dublin");
+
+    	ciudad2.setNombre("Buenos Aires");
+    	
+    	ciudad3.setNombre("Paris");
+    	
+        pais.setCiudad(ciudad);
+    	pais1.setCiudad(ciudad1);
+    	pais2.setCiudad(ciudad2);
+    	pais3.setCiudad(ciudad3);
+    	
+    	
+    	ubicacion.setLatitud(51.5072);
+    	
+    	ubicacion1.setLatitud(53.3434);
+    	
+    	ubicacion2.setLatitud(-34.6083);
+    	
+    	ubicacion3.setLatitud(48.8667);
+    	
+    	ciudad.setUbicacion(ubicacion);
+    	ciudad1.setUbicacion(ubicacion1);
+    	ciudad2.setUbicacion(ubicacion2);
+    	ciudad3.setUbicacion(ubicacion3);
+    	
+    	getSession().save(pais);
+		getSession().save(pais1);
+		getSession().save(pais2);
+		getSession().save(pais3);
+    	
+    	getSession().save(ciudad);
+		getSession().save(ciudad1);
+		getSession().save(ciudad2);
+		getSession().save(ciudad3);	    	
+		
+		getSession().save(ubicacion);
+		getSession().save(ubicacion1);
+		getSession().save(ubicacion2);
+		getSession().save(ubicacion3);
+	
+		
+		List <Pais> list=
+				getSession().createCriteria(Pais.class)
+				.createAlias("capital", "ciu")
+				.createAlias("ciu.ubicacion", "ubi")
+				.add(Restrictions.ge("ubi.latitud", new Double(23.2614)))
+				.list();
+		
+			assertThat(list.size()).isEqualTo(3);	
+				
+    }
+    
+//5)Buscar todas las ciudades del hemisferio sur 
+    
 }
